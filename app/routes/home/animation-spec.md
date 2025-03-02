@@ -1,1 +1,18 @@
-From animation standpoint, this is how I would want to have it added onto this page. So when you select an image, the whole thing should slide either to the right or to the left meaning if you click the left image then both the left and the right image would at the same time slide to the right, and the right image would start to fade away in .2 seconds and the left image would slide into the center in 0.5 seconds seconds, and then it would stay there for 0.5 seconds until the next set of image comes and when the next set of image comes in, I would like to fade away the selected image and fade in the new images and that transition should just be 0.2 seconds.
+Animation steps:
+
+1. **Image Selection**: When an image is selected:
+   - If the left image is clicked, both images slide to the right.
+   - If the right image is clicked, both images slide to the left.
+2. **Image Transition (Selected Image)**:
+   - The non-selected image fades out in 0.2 seconds as it's sliding.
+   - The selected image slides into the center in 0.5 seconds.
+3. **Pause**: The selected image stays in the center for 0.5 seconds.
+4. **New Image Set Transition**: When a new set of images is loaded:
+   - The currently displayed (selected) image fades out.
+   - The new images fade in, with a transition duration of 0.2 seconds.
+
+Implementation hints:
+
+- Use Tailwind 4 for animation if possible.
+- Use `clsx` to compose the styles if it's easier.
+- Minimize complexity.
