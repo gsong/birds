@@ -1,7 +1,6 @@
 import type { Route } from "./+types/index";
 
-import { AnimatePresence } from "motion/react";
-
+import "./styles.css";
 import { ImageOption } from "./components/ImageOption";
 import { useImageSelection } from "./hooks/useImageSelection";
 
@@ -31,8 +30,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   );
 
   return (
-    <div className="flex justify-around items-center h-screen bg-gray-100">
-      <AnimatePresence>
+    <div className="h-screen bg-gray-100">
+      <div className="image-container">
         {(!selected || selected === "image1") && (
           <ImageOption
             key={image1}
@@ -41,6 +40,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             isSelected={selected === "image1"}
             onSelect={() => handleSelect("image1")}
             onAnimationComplete={handleAnimationComplete}
+            exitAnimation={selected && selected !== "image1"}
+            position="left"
           />
         )}
         {(!selected || selected === "image2") && (
@@ -51,9 +52,11 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             isSelected={selected === "image2"}
             onSelect={() => handleSelect("image2")}
             onAnimationComplete={handleAnimationComplete}
+            exitAnimation={selected && selected !== "image2"}
+            position="right"
           />
         )}
-      </AnimatePresence>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
 
 interface ImageOptionProps {
   src: string;
@@ -6,6 +6,8 @@ interface ImageOptionProps {
   isSelected: boolean;
   onSelect: () => void;
   onAnimationComplete: () => void;
+  exitAnimation?: boolean;
+  position: "left" | "right";
 }
 
 export function ImageOption({
@@ -14,16 +16,23 @@ export function ImageOption({
   isSelected,
   onSelect,
   onAnimationComplete,
+  exitAnimation = false,
+  position,
 }: ImageOptionProps) {
+  // Determine which animation class to apply
+  const animationClass = exitAnimation
+    ? "image-exit"
+    : isSelected
+      ? "image-selected"
+      : "image-enter";
+
+  // Add position class for slide direction
+  const positionClass = `image-${position}`;
+
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ opacity: { duration: 0.2 }, x: { duration: 0.5 } }}
-      onLayoutAnimationComplete={() => isSelected && onAnimationComplete()}
-      className="w-1/3"
+    <div
+      onAnimationEnd={() => isSelected && onAnimationComplete()}
+      className={`w-1/3 ${animationClass} ${positionClass}`}
     >
       <img
         src={src}
@@ -31,6 +40,6 @@ export function ImageOption({
         className="w-full h-auto cursor-pointer rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all"
         onClick={onSelect}
       />
-    </motion.div>
+    </div>
   );
 }

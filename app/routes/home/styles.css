@@ -1,0 +1,59 @@
+/* Animation for entering images */
+.image-enter {
+  animation: fadeIn 0.2s ease-in-out forwards;
+}
+
+/* Animation for selected image */
+.image-selected {
+  animation: slideToCenter 0.5s ease-in-out forwards;
+}
+
+/* Animation for exiting images */
+.image-exit {
+  animation: fadeOut 0.2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideToCenter {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--slide-direction));
+  }
+}
+
+/* Container for the images */
+.image-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Position classes for the images */
+.image-left {
+  --slide-direction: 50%;
+}
+
+.image-right {
+  --slide-direction: -50%;
+}
