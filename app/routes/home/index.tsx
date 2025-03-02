@@ -1,8 +1,9 @@
 import type { Route } from "./+types/index";
 
-import "./styles.css";
 import { ImageOption } from "./components/ImageOption";
 import { useImageSelection } from "./hooks/useImageSelection";
+
+import "./styles.css";
 
 export const loader = async () => {
   const maxId = 200;
@@ -31,7 +32,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="h-screen bg-gray-100">
-      <div className="image-container">
+      <div className="flex justify-around items-center w-full h-full">
         {(!selected || selected === "image1") && (
           <ImageOption
             key={image1}
@@ -40,7 +41,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             isSelected={selected === "image1"}
             onSelect={() => handleSelect("image1")}
             onAnimationComplete={handleAnimationComplete}
-            exitAnimation={selected && selected !== "image1"}
+            exitAnimation={selected ? selected !== "image1" : false}
             position="left"
           />
         )}
@@ -52,7 +53,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             isSelected={selected === "image2"}
             onSelect={() => handleSelect("image2")}
             onAnimationComplete={handleAnimationComplete}
-            exitAnimation={selected && selected !== "image2"}
+            exitAnimation={selected ? selected !== "image2" : false}
             position="right"
           />
         )}
