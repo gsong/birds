@@ -33,30 +33,27 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div className="h-screen bg-gray-100">
       <div className="flex justify-around items-center w-full h-full">
-        {(!selected || selected === "image1") && (
-          <ImageOption
-            key={image1}
-            src={image1}
-            alt="Option 1"
-            isSelected={selected === "image1"}
-            onSelect={() => handleSelect("image1")}
-            onAnimationComplete={handleAnimationComplete}
-            exitAnimation={selected ? selected !== "image1" : false}
-            position="left"
-          />
-        )}
-        {(!selected || selected === "image2") && (
-          <ImageOption
-            key={image2}
-            src={image2}
-            alt="Option 2"
-            isSelected={selected === "image2"}
-            onSelect={() => handleSelect("image2")}
-            onAnimationComplete={handleAnimationComplete}
-            exitAnimation={selected ? selected !== "image2" : false}
-            position="right"
-          />
-        )}
+        <ImageOption
+          key={image1}
+          src={image1}
+          alt="Option 1"
+          isSelected={selected === "image1"}
+          onSelect={() => handleSelect("image1")}
+          onAnimationComplete={handleAnimationComplete}
+          exitAnimation={selected ? selected !== "image1" : false}
+          position="left"
+        />
+
+        <ImageOption
+          key={image2}
+          src={image2}
+          alt="Option 2"
+          isSelected={selected === "image2"}
+          onSelect={() => handleSelect("image2")}
+          onAnimationComplete={handleAnimationComplete}
+          exitAnimation={selected ? selected !== "image2" : false}
+          position="right"
+        />
       </div>
     </div>
   );
