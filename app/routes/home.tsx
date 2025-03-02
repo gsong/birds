@@ -1,12 +1,13 @@
-import type { Route } from "./+types/index";
+import type { Route } from "./+types/home";
 
 import { useState, useEffect, useRef } from "react";
 import { redirect, useFetcher } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 
 export const loader = async () => {
-  const randomInt1 = Math.floor(Math.random() * 1000) + 1;
-  const randomInt2 = Math.floor(Math.random() * 1000) + 1;
+  const maxId = 500;
+  const randomInt1 = Math.floor(Math.random() * maxId) + 1;
+  const randomInt2 = Math.floor(Math.random() * maxId) + 1;
 
   return [
     `https://picsum.photos/id/${randomInt1}/800`,
@@ -18,46 +19,15 @@ export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
   const selectedImage = formData.get("selected");
   console.log("Selected image:", selectedImage);
-  return redirect("/");
+  return undefined;
 };
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const [image1, image2] = loaderData;
-  const [selected, setSelected] = useState<string>();
-  const [animationComplete, setAnimationComplete] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const fetcher = useFetcher();
-
-  // Reset selection when new images are loaded
-  useEffect(() => {
-    setSelected(undefined);
-    setAnimationComplete(false);
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-  }, [image1, image2]);
-
-  const handleSelect = (option: string) => {
-    setSelected(option);
-    setAnimationComplete(false);
-  };
-
-  // Handle submission after animation completes and delay
-  useEffect(() => {
-    if (selected && animationComplete) {
-      timerRef.current = setTimeout(() => {
-        fetcher.submit({ selected }, { method: "post" });
-      }, 500); // 500ms delay after animation is complete
-
-      return () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
-      };
-    }
-  }, [selected, animationComplete, fetcher]);
-
-  const handleAnimationComplete = () => {
-    setAnimationComplete(true);
-  };
+  const { selected, handleSelect, handleAnimationComplete } = useImageSelection(
+    image1,
+    image2,
+  );
 
   return (
     <div className="flex justify-around items-center h-screen bg-gray-100">
@@ -111,4 +81,51 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       </AnimatePresence>
     </div>
   );
+}
+
+function useImageSelection(image1: string, image2: string) {
+  const [selected, setSelected] = useState<string>();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const fetcher = useFetcher();
+  const { animationComplete, setAnimationComplete, handleAnimationComplete } =
+    useAnimationState();
+
+  // Reset selection when new images are loaded
+  useEffect(() => {
+    setSelected(undefined);
+    setAnimationComplete(false);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+  }, [image1, image2]);
+
+  const handleSelect = (option: string) => {
+    setSelected(option);
+    setAnimationComplete(false);
+  };
+
+  // Handle submission after animation completes and delay
+  useEffect(() => {
+    if (selected && animationComplete) {
+      timerRef.current = setTimeout(() => {
+        fetcher.submit({ selected }, { method: "post" });
+      }, 500); // 500ms delay after animation is complete
+
+      return () => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+      };
+    }
+  }, [selected, animationComplete, fetcher]);
+
+  return { selected, handleSelect, handleAnimationComplete };
+}
+
+function useAnimationState() {
+  const [animationComplete, setAnimationComplete] = useState(false);
+
+  const handleAnimationComplete = () => {
+    setAnimationComplete(true);
+  };
+
+  return { animationComplete, handleAnimationComplete, setAnimationComplete };
 }
